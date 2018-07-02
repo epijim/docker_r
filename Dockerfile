@@ -6,10 +6,9 @@ LABEL maintainer="James Black <james.black.jb2@roche.com>"
 
 # System libs
 RUN apt-get update \
-  && apt-get install -y libnlopt-dev
-RUN apt-get update && apt-get install -my wget gnupg
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+  && apt-get install -y libnlopt-dev &&\ 
+  apt-get install -my wget gnupg && \
+  apt-get install -y --no-install-recommends \
     lbzip2 \
     libfftw3-dev \
     libgdal-dev \
@@ -30,15 +29,15 @@ RUN apt-get update \
     mkdir /usr/share/fonts/external/  # ensure that external fonts folder exists
 
 # Install Java
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
-RUN echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-RUN apt-get update
-RUN apt-get install oracle-java8-installer -y
-RUN apt-get clean
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-RUN R CMD javareconf
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections &&\
+  echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list &&\
+  echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list &&\
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886 &&\
+  apt-get update &&\
+  apt-get install oracle-java8-installer -y &&\
+  apt-get clean &&\
+  JAVA_HOME /usr/lib/jvm/java-8-oracle &&\
+  R CMD javareconf 
 
 # Update font cache
 RUN fc-cache -f -v
